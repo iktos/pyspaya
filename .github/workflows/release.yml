@@ -6,10 +6,8 @@ on:
     types: [created]
 
 jobs:
-  lint-test:
-    uses: iktos/pyspaya/.github/workflows/lint-test.yml
 
-  publish:
+  lint-test-publish:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -42,5 +40,18 @@ jobs:
       - name: Install project
         run: poetry install --no-interaction
 
+      # Run pipeline
+      - name: Black
+        run: poetry run task check-black
+      - name: Linter
+        run: poetry run task linter
+      - name: Mypy
+        run: poetry run task mypy
+      - name: Run tests
+        run: |
+          poetry run task test
+          poetry run coverage report
+
+      # publish
       - name: Publish
         run: poetry publish --build --username poetry publish --build --username __token__ --password ${{secrets.PYPI_TOKEN}}
