@@ -31,8 +31,8 @@ sphinx_rtd_theme = "*"
 sphinx-autodoc-typehints = "*"
 
 [tool.taskipy.tasks]
-black = "black iktos/"
-check-black = "black iktos/ --check"
+black = "black iktos/ tests/"
+check-black = "black iktos/ tests/ --check"
 test = "python -m pytest --cov ./iktos --cov-report="
 mypy = "mypy iktos/"
 linter = "flake8 iktos/"
