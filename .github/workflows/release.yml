@@ -7,7 +7,7 @@ on:
 
 jobs:
   lint-test:
-    use:iktos/pyspaya/.github/workflows/lint-test.yml
+    use: iktos/pyspaya/.github/workflows/lint-test.yml
 
   publish:
     runs-on: ubuntu-latest

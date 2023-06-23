@@ -32,14 +32,6 @@ repos:
         entry: 'TODO'
         language: pygrep
 
-  - repo: local
-    hooks:
-      - id: tests
-        name: Tests
-        entry: poetry run task test
-        pass_filenames: false
-        language: system
-
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.0.1
     hooks:
