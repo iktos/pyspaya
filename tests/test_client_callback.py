@@ -52,7 +52,6 @@ async def test_callback(websocket_nominal, url_websocket, token):
 @pytest.mark.asyncio
 async def test_reconnect(websocket_stop_and_continue, url_websocket, token):
     async for smiles_to_send, check in websocket_stop_and_continue:
-
         nb_smiles = 0
         for s in smiles_to_send:
             if isinstance(s, list):

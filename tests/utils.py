@@ -51,9 +51,9 @@ class WebsocketServerTest:
         self._port = port
         self._timeout_receiving = timeout_receiving
         if scenario is None:
-            self._scenario: Callable[[_WEBSOCKET, str], Coroutine[Any, Any, None]] = (
-                self._scenario_yield
-            )
+            self._scenario: Callable[
+                [_WEBSOCKET, str], Coroutine[Any, Any, None]
+            ] = self._scenario_yield
         else:
             self._scenario = scenario
         self._to_yield: Dict[str, List] = dict()

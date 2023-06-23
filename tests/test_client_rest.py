@@ -227,7 +227,7 @@ def test_error_bad_response(url, url_batch):
         client_not_json = SpayaClientREST(
             url=url,
             authorization=BearerToken(token="token"),
-            settings=SettingsREST(max_retry=0)
+            settings=SettingsREST(max_retry=0),
         )
         client_not_json.start_retrosynthesis("C")
 
@@ -247,9 +247,7 @@ def test_error_404(url, url_batch):
 @responses.activate
 def test_status(url, url_status):
     responses.add(responses.GET, url_status, json={"queue_size": 3}, status=200)
-    client = SpayaClientREST(
-        url=url, authorization=BearerToken(token="token")
-    )
+    client = SpayaClientREST(url=url, authorization=BearerToken(token="token"))
     status = client.get_status()
     LOGGER.debug(f"status:{repr(status)}")
     assert status.queue_size == 3
@@ -264,9 +262,7 @@ def test_commercial_compounds_providers(url, url_cc_providers):
         json={"providers": ["molport", "dealer"]},
         status=200,
     )
-    client = SpayaClientREST(
-        url=url, authorization=BearerToken(token="token")
-    )
+    client = SpayaClientREST(url=url, authorization=BearerToken(token="token"))
     result_cc_providers = client.get_commercial_compounds_providers()
     assert result_cc_providers == providers
 
@@ -333,9 +329,7 @@ def test_commercial_compounds_list(url, url_commercial_compounds):
         },
         status=200,
     )
-    client = SpayaClientREST(
-        url=url, authorization=BearerToken(token="token")
-    )
+    client = SpayaClientREST(url=url, authorization=BearerToken(token="token"))
     result_cc_providers = client.get_commercial_compounds([smiles_1, smiles_2])
     assert len(result_cc_providers) == 2
     first_results = result_cc_providers[smiles_1]
@@ -380,9 +374,7 @@ def test_commercial_compounds_route(url, url_commercial_compounds):
         json={"commercial_compounds": []},
         status=200,
     )
-    client = SpayaClientREST(
-        url=url, authorization=BearerToken(token="token")
-    )
+    client = SpayaClientREST(url=url, authorization=BearerToken(token="token"))
     result_cc_providers = client.get_commercial_compounds(smiles)
     assert len(result_cc_providers) == 7
     for values in result_cc_providers.values():
@@ -401,9 +393,7 @@ def test_commercial_compounds_route_no_tree(url):
     smiles.tree = None
     assert smiles.root_smiles() is None
     assert len(smiles.tree_leaf()) == 0
-    client = SpayaClientREST(
-        url=url, authorization=BearerToken(token="token")
-    )
+    client = SpayaClientREST(url=url, authorization=BearerToken(token="token"))
     result_cc_providers = client.get_commercial_compounds(smiles)
     assert len(result_cc_providers) == 0
 
@@ -419,9 +409,7 @@ def test_commercial_compounds_route_just_root(url, url_commercial_compounds):
         json={"commercial_compounds": []},
         status=200,
     )
-    client = SpayaClientREST(
-        url=url, authorization=BearerToken(token="token")
-    )
+    client = SpayaClientREST(url=url, authorization=BearerToken(token="token"))
     result_cc_providers = client.get_commercial_compounds(smiles)
     assert len(result_cc_providers) == 1
     assert responses.calls[0].request.body.decode("utf-8") == '{"smiles": "A"}'
@@ -437,9 +425,7 @@ def test_commercial_compounds_series(url, url_commercial_compounds):
         json={"commercial_compounds": []},
         status=200,
     )
-    client = SpayaClientREST(
-        url=url, authorization=BearerToken(token="token")
-    )
+    client = SpayaClientREST(url=url, authorization=BearerToken(token="token"))
     result_cc_providers = client.get_commercial_compounds(smiles)
     assert len(result_cc_providers) == 2
     assert responses.calls[0].request.body.decode("utf-8") == '{"smiles": "A"}'
@@ -533,9 +519,7 @@ def test_name_reactions(url, url_name_reaction):
         json={"name_reactions": name_reactions},
         status=200,
     )
-    client = SpayaClientREST(
-        url=url, authorization=BearerToken(token="token")
-    )
+    client = SpayaClientREST(url=url, authorization=BearerToken(token="token"))
     result_name_reactions = client.get_name_reactions(filter_name_reactions="name")
     assert result_name_reactions == name_reactions
 
@@ -569,9 +553,7 @@ def test_route_nominal(url, url_routes):
         },
         status=200,
     )
-    client = SpayaClientREST(
-        url=url, authorization=BearerToken(token="token")
-    )
+    client = SpayaClientREST(url=url, authorization=BearerToken(token="token"))
     result_routes = client.routes(smiles=["CCCC", "HHHHHH"], top_k_routes=2)
 
     LOGGER.info(f"result_routes: {result_routes}")
@@ -621,9 +603,7 @@ def test_route_nominal_dataframe(url, url_routes):
         },
         status=200,
     )
-    client = SpayaClientREST(
-        url=url, authorization=BearerToken(token="token")
-    )
+    client = SpayaClientREST(url=url, authorization=BearerToken(token="token"))
     smiles_column = "smiles_input"
     df = DataFrame(
         {smiles_column: ["CCCC", "HHHHHH"], "other_info": ["CCCC", "HHHHHH"]}
@@ -658,9 +638,7 @@ def test_route_smiles_not_done(url, retro_response_add):
         smiles_result=[{"status": StatusCode.SUBMITTED.value, "smiles": smiles}]
     )
 
-    client = SpayaClientREST(
-        url=url, authorization=BearerToken(token="token")
-    )
+    client = SpayaClientREST(url=url, authorization=BearerToken(token="token"))
     client.start_retrosynthesis(smiles=smiles)
     with pytest.raises(ValueError):
         client.routes(smiles=smiles)
@@ -767,10 +745,7 @@ def test_cluster_error_parameters(cluster_nominal_scenario_w_extra, url, token):
 
 @responses.activate
 def test_quota(url, url_retrosynthesis_quota):
-
-    client = SpayaClientREST(
-        url=url, authorization=BearerToken(token="token")
-    )
+    client = SpayaClientREST(url=url, authorization=BearerToken(token="token"))
 
     responses.add(
         responses.GET,
@@ -784,9 +759,7 @@ def test_quota(url, url_retrosynthesis_quota):
 
 @responses.activate
 def test_quota_none(url, url_retrosynthesis_quota):
-    client = SpayaClientREST(
-        url=url, authorization=BearerToken(token="token")
-    )
+    client = SpayaClientREST(url=url, authorization=BearerToken(token="token"))
 
     responses.add(
         responses.GET,

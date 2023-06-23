@@ -47,9 +47,7 @@ def test_create_entry():
     )
 
     client = SpayaClient(
-        url=url,
-        authorization=BearerToken(token="token"),
-        parameters=parameters
+        url=url, authorization=BearerToken(token="token"), parameters=parameters
     )
 
     assert client.url == url
@@ -104,8 +102,11 @@ def test_progression():
     response_json_1 = create_retro_response_result(
         status=StatusCode.INVALID_SMILES,
         smiles=[
-            smiles_invalid, smiles_error, smiles_submited, smiles_running,
-            smiles_queue_full
+            smiles_invalid,
+            smiles_error,
+            smiles_submited,
+            smiles_running,
+            smiles_queue_full,
         ],
     )
     client._update_result_batch(response_json=response_json_1)

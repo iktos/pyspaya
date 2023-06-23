@@ -27,7 +27,6 @@ LOGGER = logging.getLogger(__name__)
 @pytest.mark.asyncio
 async def test_nominal(websocket_nominal, url_websocket, token):
     async for smiles_to_send, check in websocket_nominal:
-
         result = dict()  # type: Dict[str, RetrosynthesisResult]
         async with SpayaClientAsync(
             url=url_websocket, authorization=BearerToken(token=token)
@@ -44,7 +43,6 @@ async def test_nominal(websocket_nominal, url_websocket, token):
 @pytest.mark.asyncio
 async def test_too_many_smiles(websocket_nominal, url_websocket, token):
     async for smiles_to_send, check in websocket_nominal:
-
         result = dict()  # type: Dict[str, RetrosynthesisResult]
         async with SpayaClientAsync(
             url=url_websocket,
@@ -89,7 +87,6 @@ async def test_nominal_already_done(
     websocket_nominal_already_done, url_websocket, token
 ):
     async for smiles_to_send, check in websocket_nominal_already_done:
-
         result = dict()  # type: Dict[str, RetrosynthesisResult]
         async with SpayaClientAsync(
             url=url_websocket, authorization=BearerToken(token=token)
@@ -105,11 +102,8 @@ async def test_nominal_already_done(
 
 
 @pytest.mark.asyncio
-async def test_queue_full(
-    websocket_nominal_queue_full, url_websocket, token
-):
+async def test_queue_full(websocket_nominal_queue_full, url_websocket, token):
     async for smiles_to_send, check in websocket_nominal_queue_full:
-
         result = dict()  # type: Dict[str, RetrosynthesisResult]
         async with SpayaClientAsync(
             url=url_websocket, authorization=BearerToken(token=token)
@@ -127,7 +121,6 @@ async def test_queue_full(
 @pytest.mark.asyncio
 async def test_reconnect(websocket_stop_and_continue, url_websocket, token):
     async for smiles_to_send, check in websocket_stop_and_continue:
-
         result = dict()  # type: Dict[str, RetrosynthesisResult]
         async with SpayaClientAsync(
             url=url_websocket, authorization=BearerToken(token=token)
@@ -170,14 +163,10 @@ def test_uri(url, url_websocket, url_websocket_path):
     for url_test, expected in test_expected:
         if isinstance(expected, ValueError):
             with pytest.raises(ValueError):
-                SpayaClientAsync(
-                    url=url_test,
-                    authorization=BearerToken(token="token")
-                )
+                SpayaClientAsync(url=url_test, authorization=BearerToken(token="token"))
         else:
             client = SpayaClientAsync(
-                url=url_test,
-                authorization=BearerToken(token="token")
+                url=url_test, authorization=BearerToken(token="token")
             )
             assert client._url_websocket == expected
 
@@ -190,11 +179,9 @@ def test_error_url(token):
 @pytest.mark.asyncio
 async def test_error_websocket_at_start(error_websocket_at_start, url_websocket, token):
     async for smiles_to_send in error_websocket_at_start:
-
         async with SpayaClientAsync(
             url=url_websocket, authorization=BearerToken(token=token)
         ) as client:
-
             with pytest.raises(websockets.WebSocketException):
                 for smiles_list in smiles_to_send:
                     await client.start_retrosynthesis(smiles_list)
@@ -205,11 +192,9 @@ async def test_error_websocket_consume(
     websocket_error_after_start, url_websocket, token
 ):
     async for smiles_to_send in websocket_error_after_start:
-
         async with SpayaClientAsync(
             url=url_websocket, authorization=BearerToken(token=token)
         ) as client:
-
             for smiles_list in smiles_to_send:
                 await client.start_retrosynthesis(smiles_list)
             with pytest.raises(websockets.WebSocketException):
@@ -222,11 +207,9 @@ async def test_error_websocket_wait_result(
     websocket_error_after_start, url_websocket, token
 ):
     async for smiles_to_send in websocket_error_after_start:
-
         async with SpayaClientAsync(
             url=url_websocket, authorization=BearerToken(token=token)
         ) as client:
-
             for smiles_list in smiles_to_send:
                 await client.start_retrosynthesis(smiles_list)
             with pytest.raises(websockets.WebSocketException):
@@ -423,7 +406,6 @@ async def cluster_nominal_no_extra_async(url, token, smiles_list, check):
 
 @responses.activate
 def test_cluster_nominal_no_extra(cluster_nominal_scenario_no_extra, url, token):
-
     smiles_list, check = cluster_nominal_scenario_no_extra
 
     loop = asyncio.get_event_loop()

@@ -576,9 +576,7 @@ async def websocket_nominal_queue_full(url_websocket_path, port):
     elem_1 = create_retro_result(
         smiles=smiles_list[1], progression=100, status=StatusCode.DONE
     )
-    ws.add_to_yield_on_received(
-        received=smiles_1_received, elem=elem_1, sleep_time=0.1
-    )
+    ws.add_to_yield_on_received(received=smiles_1_received, elem=elem_1, sleep_time=0.1)
 
     def check_nominal_scenario(to_check: Dict[str, RetrosynthesisResult]):
         check_retro_result(
@@ -600,7 +598,6 @@ async def websocket_nominal_queue_full(url_websocket_path, port):
 
     async with WebsocketServerRunner(server=ws):
         yield [smiles_list], check_nominal_scenario
-
 
 
 @pytest.fixture(scope="function")
