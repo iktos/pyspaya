@@ -1,0 +1,50 @@
+repos:
+  - repo: local
+    hooks:
+      - id: black
+        name: Black
+        entry: poetry run task black
+        pass_filenames: false
+        language: system
+
+  - repo: local
+    hooks:
+      - id: flake8
+        name: Flake8
+        entry: poetry run task linter
+        pass_filenames: false
+        language: system
+
+  - repo: local
+    hooks:
+      - id: mypy
+        name: MyPy
+        entry: poetry run task mypy
+        pass_filenames: false
+        language: system
+
+  - repo: local
+    hooks:
+      - id: TODO
+        name: Check for left TODO
+        types: [python]
+        args: [--multiline]
+        entry: 'TODO'
+        language: pygrep
+
+  - repo: local
+    hooks:
+      - id: tests
+        name: Tests
+        entry: poetry run task test
+        pass_filenames: false
+        language: system
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.0.1
+    hooks:
+      - id: trailing-whitespace
+        exclude: ^tests/.*/fixtures/.*
+      - id: end-of-file-fixer
+        exclude: ^tests/.*/fixtures/.*
+      - id: debug-statements

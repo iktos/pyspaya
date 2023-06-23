@@ -1,0 +1,23 @@
+__pycache__
+.coverage
+.coverage.*
+.DS_Store
+.env
+.ipynb_checkpoints
+.pytest_cache
+.mypy_cache
+.tox
+.venv
+*.egg*
+*.pyc
+*.swp
+build
+dist
+cov_html
+*.ipynb
+.idea
+.vscode
+
+# Sphinx documentation
+docs/build/
+public/
