@@ -15,7 +15,7 @@ requests = "^2.24.0"
 websockets = "^8.1"
 pandas = "*"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.test.dependencies]
 taskipy = "^1.2.1"
 flake8 = "^5.0.4"
 mypy = "^1.4.0"
@@ -26,9 +26,12 @@ pytest-asyncio = "^0.21.0"
 responses = "^0.23.1"
 types-requests = "*"
 pandas-stubs = "*"
-sphinx = "*"
+
+[tool.poetry.group.docs.dependencies]
+sphinx = "^3.5.3"
 sphinx_rtd_theme = "*"
 sphinx-autodoc-typehints = "*"
+jinja2 = "3.0.3"
 
 [tool.taskipy.tasks]
 black = "black iktos/ tests/"
@@ -36,7 +39,7 @@ check-black = "black iktos/ tests/ --check"
 test = "python -m pytest --cov ./iktos --cov-report="
 mypy = "mypy iktos/"
 linter = "flake8 iktos/"
-docs = "sphinx-build -d docs/build/doctrees docs/source public"
+docs = "sphinx-build -b html -d docs/build/doctrees docs/source public"
 cov-html = "coverage html"
 cov-report = "coverage report"
 
