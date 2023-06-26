@@ -5,6 +5,7 @@ repos:
         name: Black
         entry: poetry run task black
         pass_filenames: false
+        files: ^(iktos|tests)
         language: system
 
   - repo: local
@@ -13,6 +14,7 @@ repos:
         name: Flake8
         entry: poetry run task linter
         pass_filenames: false
+        files: ^iktos
         language: system
 
   - repo: local
@@ -21,6 +23,7 @@ repos:
         name: MyPy
         entry: poetry run task mypy
         pass_filenames: false
+        files: ^iktos
         language: system
 
   - repo: local
@@ -31,14 +34,6 @@ repos:
         args: [--multiline]
         entry: 'TODO'
         language: pygrep
-
-  - repo: local
-    hooks:
-      - id: tests
-        name: Tests
-        entry: poetry run task test
-        pass_filenames: false
-        language: system
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.0.1

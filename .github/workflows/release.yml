@@ -6,11 +6,12 @@ on:
     types: [created]
 
 jobs:
-  lint-test:
-    use:iktos/pyspaya/.github/workflows/lint-test.yml
 
-  publish:
+  lint-test-publish:
     runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      id-token: write
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
@@ -42,5 +43,20 @@ jobs:
       - name: Install project
         run: poetry install --no-interaction
 
-      - name: Publish
-        run: poetry publish --build --username poetry publish --build --username __token__ --password ${{secrets.PYPI_TOKEN}}
+      # Run pipeline
+      - name: Black
+        run: poetry run task check-black
+      - name: Linter
+        run: poetry run task linter
+      - name: Mypy
+        run: poetry run task mypy
+      - name: Run tests
+        run: |
+          poetry run task test
+          poetry run coverage report
+
+      # Build and publish
+      - name: Build package
+        run: poetry build --verbose --no-interaction
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
