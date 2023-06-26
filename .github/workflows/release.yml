@@ -66,9 +66,10 @@ jobs:
 #      - name: Publish package distributions to PyPI
 #        uses: pypa/gh-action-pypi-publish@release/v1
 
-  # For test, move it to release
+  # Fix after test
   pages:
     needs: lint-test-publish
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: $
