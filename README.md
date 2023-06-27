@@ -1,5 +1,11 @@
 # pyspaya
 
+[![Documenation](https://img.shields.io/badge/Documentation-8A2BE2)](https://iktos.github.io/pyspaya/)
+![PyPI](https://img.shields.io/pypi/v/pyspaya)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pyspaya)
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/iktos/pyspaya/release.yml)
+![GitHub](https://img.shields.io/github/license/iktos/pyspaya)
+
 [Description](#description)
 - [Spaya API](#spaya-api)
 - [Retrosynthesis parameters](#retrosynthesis-parameters)
