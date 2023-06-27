@@ -28,7 +28,7 @@ commercially available starting materials are identified.
 
 Useful links:
 - [Spaya Public](https://spaya.ai)
-- [Spaya API](https://spaya.ai/#api)
+- [Spaya API](https://iktos.ai/spaya-api/)
 - [Spaya REST documentation](https://spaya.ai/retrosynthesis-api/redoc)
 - [Spaya Websocket documentation](https://spaya.ai/retrosynthesis-api/static/asyncapi.html)
 
