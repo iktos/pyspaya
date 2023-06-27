@@ -69,6 +69,7 @@ jobs:
   # For test, move it to release
   pages:
     needs: lint-test-publish
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: $
