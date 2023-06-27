@@ -43,16 +43,19 @@ Useful links:
 Each scored SMILES return a RetrosynthesisResult:
 
 ```python
-from iktos.spaya import (
-    BearerToken,
-    SpayaClientREST,
-    RetrosynthesisResult
-)
+from typing import Dict
+from iktos.spaya import BearerToken, SpayaClientREST, RetrosynthesisResult
+
+# Create a client
 client = SpayaClientREST(url="https://spaya.ai", authorization=BearerToken(token="YourToken"))
-client.score_smiles(smiles=["c1ccn2nccc2c1"])
-result: RetrosynthesisResult = client["c1ccn2nccc2c1"]
-print(f"Progress:{result.progress} Status:{result.status}")
-print(f"Score:{result.rscore} Number of steps:{result.nb_steps}")
+
+# Start a retrosynthesis and wait for the results
+result: Dict[str, RetrosynthesisResult] = client.score_smiles(smiles=["c1ccn2nccc2c1"])
+
+# Show results
+retro_result: RetrosynthesisResult = result["c1ccn2nccc2c1"]
+print(f"Progress:{retro_result.progress} Status:{retro_result.status}")
+print(f"Score:{retro_result.rscore} Number of steps:{retro_result.nb_steps}")
 ```
 
 ## Clients

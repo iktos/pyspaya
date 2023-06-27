@@ -60,11 +60,10 @@ jobs:
           poetry run coverage report
 
       # Build and publish
-# Activate when page are generated
-#      - name: Build package
-#        run: poetry build --verbose --no-interaction
-#      - name: Publish package distributions to PyPI
-#        uses: pypa/gh-action-pypi-publish@release/v1
+      - name: Build package
+        run: poetry build --verbose --no-interaction
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
 
   # For test, move it to release
   pages:
