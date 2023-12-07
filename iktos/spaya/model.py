@@ -534,7 +534,7 @@ class Route:
             return None
 
     def __str__(self) -> str:
-        return f"score: {self.rscore}, nb_steps:{self.nb_steps}, tree:{self.tree}"
+        return f"rscore: {self.rscore}, nb_steps:{self.nb_steps}, tree:{self.tree}"
 
     def __repr__(self) -> str:
         return f"{type(self)}({id(self)}) <{str(self)}>"

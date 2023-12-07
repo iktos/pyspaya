@@ -8,7 +8,7 @@ import pytest
 import logging
 
 import numpy as np
-from pandas import DataFrame
+from pandas import DataFrame, concat
 
 from iktos.spaya import (
     BearerToken,
@@ -316,13 +316,15 @@ def test_dataframe_multi_pop():
     )
     client._update_result_batch(response_json=response_json)
 
-    df = df.append(
-        {smiles_column: duplicated_smiles, "other_info": duplicated_smiles},
-        ignore_index=True,
+    df_duplicated = DataFrame(
+        {smiles_column: [duplicated_smiles], "other_info": [duplicated_smiles]}
     )
-    df = df.append(
-        {smiles_column: extra_smiles, "other_info": extra_smiles}, ignore_index=True
+    df = concat([df, df_duplicated], ignore_index=True)
+
+    df_extra_smiles = DataFrame(
+        {smiles_column: [extra_smiles], "other_info": [extra_smiles]}
     )
+    df = concat([df, df_extra_smiles], ignore_index=True)
 
     df = client.pop_finished_to_dataframe(
         df=df,
