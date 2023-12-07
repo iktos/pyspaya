@@ -308,14 +308,19 @@ class RetrosynthesisParameters:
             result["forbidden_structures"] = self.forbidden_structures
         if self.remove_chirality is not None:
             result["remove_chirality"] = self.remove_chirality
-        if self.name_reactions_only is not None:
-            result["name_reactions_only"] = self.name_reactions_only
-        if self.name_reactions_exclude is not None:
-            result["name_reactions_exclude"] = self.name_reactions_exclude
-        if self.name_reactions_at_least is not None:
-            result["name_reactions_at_least"] = self.name_reactions_at_least
+        self._to_dict_add_name_reaction(result)
         self._to_dict_add_cc(result)
         return result
+
+    def _to_dict_add_name_reaction(
+        self, data: Dict[str, Union[int, float, str, List[str]]]
+    ):
+        if self.name_reactions_only is not None:
+            data["name_reactions_only"] = self.name_reactions_only
+        if self.name_reactions_exclude is not None:
+            data["name_reactions_exclude"] = self.name_reactions_exclude
+        if self.name_reactions_at_least is not None:
+            data["name_reactions_at_least"] = self.name_reactions_at_least
 
     def _to_dict_add_cc(self, data: Dict[str, Union[int, float, str, List[str]]]):
         if self.cc_providers is not None:

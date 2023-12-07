@@ -386,6 +386,30 @@ class SpayaClient:
         )
         return response_json.get("providers", [])
 
+    @staticmethod
+    def _convert_smile_type(smiles: Union[str, List[str], Route, Series]) -> List[str]:
+        """
+        Convert any type of collection to a list of strings
+
+        Args:
+            smiles: Molecules represented as either, a SMILES, a list of SMILES,
+             a Route, or a Series.
+        """
+        if isinstance(smiles, str):
+            smiles_list: List[str] = [smiles]
+        elif isinstance(smiles, Series):
+            smiles_list = smiles.to_list()  # type: ignore[assignment]
+        elif isinstance(smiles, Route):
+            smiles_list = smiles.tree_leaf()
+            root_smiles = smiles.root_smiles()
+            if smiles_list and root_smiles is not None:
+                smiles_list.append(root_smiles)
+        elif isinstance(smiles, list):
+            smiles_list = smiles
+        else:
+            raise TypeError("unknown type for smiles")
+        return smiles_list
+
     def _get_commercial_compounds(
         self,
         smiles: Union[str, List[str], Route, Series],
@@ -422,17 +446,7 @@ class SpayaClient:
         Returns:
             A dictionnary SMILES -> commercial compounds found
         """
-        if isinstance(smiles, str):
-            smiles_list = [smiles]
-        elif isinstance(smiles, Series):
-            smiles_list = smiles.to_list()
-        elif isinstance(smiles, Route):
-            smiles_list = smiles.tree_leaf()
-            root_smiles = smiles.root_smiles()
-            if smiles_list and root_smiles is not None:
-                smiles_list.append(root_smiles)
-        else:
-            smiles_list = smiles
+        smiles_list = self._convert_smile_type(smiles)
 
         result: Dict[str, List[CommercialCompound]] = dict()
         entry = {}
