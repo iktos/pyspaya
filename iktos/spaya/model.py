@@ -256,6 +256,12 @@ class RetrosynthesisParameters:
              these molecules as an intermediate product. This helps guide the process
              through reactions or molecules you already own or have expertise with for
              example.
+            imposed_structures: Desired forbidden substructures (as a list of SMARTS).
+             This will force our models to exclude routes which have at least one of
+             these structures present in one or more of the reactants.
+            forbidden_structures: Desired imposed substructures (as a list of SMARTS).
+             This will force our models to only find routes which have at least one of
+             these structures present in one or more of the reactants.
             cc_providers: List of desired commercial compounds providers.
              An empty list select them all
             cc_max_price_per_g: Maximum price per gramme for a commercial compound
