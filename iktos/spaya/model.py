@@ -212,6 +212,8 @@ class RetrosynthesisParameters:
         "early_stopping_score",
         "early_stopping_timeout",
         "intermediate_smiles",
+        "imposed_structures",
+        "forbidden_structures",
         "cc_providers",
         "cc_max_price_per_g",
         "cc_max_delivery_days",
@@ -230,6 +232,8 @@ class RetrosynthesisParameters:
         early_stopping_score: Optional[float] = None,
         early_stopping_timeout: Optional[float] = None,
         intermediate_smiles: Optional[List[str]] = None,
+        imposed_structures: Optional[List[str]] = None,
+        forbidden_structures: Optional[List[str]] = None,
         cc_providers: Optional[List[str]] = None,
         cc_max_price_per_g: Optional[float] = None,
         cc_max_delivery_days: Optional[int] = None,
@@ -252,6 +256,12 @@ class RetrosynthesisParameters:
              these molecules as an intermediate product. This helps guide the process
              through reactions or molecules you already own or have expertise with for
              example.
+            imposed_structures: Desired forbidden substructures (as a list of SMARTS).
+             This will force our models to exclude routes which have at least one of
+             these structures present in one or more of the reactants.
+            forbidden_structures: Desired imposed substructures (as a list of SMARTS).
+             This will force our models to only find routes which have at least one of
+             these structures present in one or more of the reactants.
             cc_providers: List of desired commercial compounds providers.
              An empty list select them all
             cc_max_price_per_g: Maximum price per gramme for a commercial compound
@@ -270,6 +280,8 @@ class RetrosynthesisParameters:
         self.early_stopping_score = early_stopping_score
         self.early_stopping_timeout = early_stopping_timeout
         self.intermediate_smiles = intermediate_smiles
+        self.imposed_structures = imposed_structures
+        self.forbidden_structures = forbidden_structures
         self.cc_providers = cc_providers
         self.cc_max_price_per_g = cc_max_price_per_g
         self.cc_max_delivery_days = cc_max_delivery_days
@@ -296,16 +308,25 @@ class RetrosynthesisParameters:
             result["early_stopping_timeout"] = self.early_stopping_timeout
         if self.intermediate_smiles is not None:
             result["intermediate_smiles"] = self.intermediate_smiles
+        if self.imposed_structures is not None:
+            result["imposed_structures"] = self.imposed_structures
+        if self.forbidden_structures is not None:
+            result["forbidden_structures"] = self.forbidden_structures
         if self.remove_chirality is not None:
             result["remove_chirality"] = self.remove_chirality
-        if self.name_reactions_only is not None:
-            result["name_reactions_only"] = self.name_reactions_only
-        if self.name_reactions_exclude is not None:
-            result["name_reactions_exclude"] = self.name_reactions_exclude
-        if self.name_reactions_at_least is not None:
-            result["name_reactions_at_least"] = self.name_reactions_at_least
+        self._to_dict_add_name_reaction(result)
         self._to_dict_add_cc(result)
         return result
+
+    def _to_dict_add_name_reaction(
+        self, data: Dict[str, Union[int, float, str, List[str]]]
+    ):
+        if self.name_reactions_only is not None:
+            data["name_reactions_only"] = self.name_reactions_only
+        if self.name_reactions_exclude is not None:
+            data["name_reactions_exclude"] = self.name_reactions_exclude
+        if self.name_reactions_at_least is not None:
+            data["name_reactions_at_least"] = self.name_reactions_at_least
 
     def _to_dict_add_cc(self, data: Dict[str, Union[int, float, str, List[str]]]):
         if self.cc_providers is not None:
@@ -331,6 +352,8 @@ class RetrosynthesisParameters:
             self.max_depth == other.max_depth
             and self.early_stopping_score == other.early_stopping_score
             and self.intermediate_smiles == other.intermediate_smiles
+            and self.imposed_structures == other.imposed_structures
+            and self.forbidden_structures == other.forbidden_structures
             and self.cc_providers == other.cc_providers
             and self.cc_max_price_per_g == other.cc_max_price_per_g
             and self.cc_max_delivery_days == other.cc_max_delivery_days
@@ -511,7 +534,7 @@ class Route:
             return None
 
     def __str__(self) -> str:
-        return f"score: {self.rscore}, nb_steps:{self.nb_steps}, tree:{self.tree}"
+        return f"rscore: {self.rscore}, nb_steps:{self.nb_steps}, tree:{self.tree}"
 
     def __repr__(self) -> str:
         return f"{type(self)}({id(self)}) <{str(self)}>"

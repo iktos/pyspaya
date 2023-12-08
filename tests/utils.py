@@ -74,7 +74,7 @@ class WebsocketServerTest:
         scenario_for_received = self._to_yield.get(received, [])
         try:
             if not scenario_for_received:
-                raise websockets.ConnectionClosedError(code=1007, reason="invalid data")
+                raise websockets.InvalidMessage()
             while len(scenario_for_received) > 0:
                 sleep_time, elem = scenario_for_received[0]
                 await asyncio.sleep(sleep_time)
@@ -85,8 +85,10 @@ class WebsocketServerTest:
                     response = json.dumps(elem)
                     await websocket.send(response)
         except websockets.WebSocketException as wse:
-            if isinstance(wse, websockets.ConnectionClosed):
-                await websocket.close(code=wse.code, reason=wse.reason)
+            if isinstance(wse, websockets.ConnectionClosed) and wse.rcvd is not None:
+                await websocket.close(code=wse.rcvd.code, reason=wse.rcvd.reason)
+            elif isinstance(wse, websockets.ConnectionClosed) and wse.sent is not None:
+                await websocket.close(code=wse.sent.code, reason=wse.sent.reason)
             else:
                 await websocket.close()
 

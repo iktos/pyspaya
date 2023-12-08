@@ -158,9 +158,8 @@ class SpayaClientCallback(SpayaClientAsync):
                         while self._smiles_done:
                             smiles, result = self._smiles_done.popitem()
                             await self._callback(smiles, result)
-                except websockets.exceptions.ConnectionClosed as cc:
-                    if cc.code > 1001:
-                        raise cc
+                except websockets.exceptions.ConnectionClosedOK:
+                    pass
                 await asyncio.sleep(0.5)
 
         except Exception as e:

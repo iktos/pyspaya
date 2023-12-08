@@ -176,9 +176,8 @@ class SpayaClientAsync(SpayaClient):
                             smiles_list.remove(smiles)
                         except ValueError:
                             pass
-            except websockets.exceptions.ConnectionClosed as cc:
-                if cc.code > 1001:
-                    raise cc
+            except websockets.exceptions.ConnectionClosedOK:
+                pass
             await asyncio.sleep(0.2)
 
     async def wait_result(
@@ -199,9 +198,8 @@ class SpayaClientAsync(SpayaClient):
                     if callback_progression is not None:
                         await callback_progression(self.progression)
                     self._update_result(response_json=response_json)
-            except websockets.exceptions.ConnectionClosed as cc:
-                if cc.code > 1001:
-                    raise cc
+            except websockets.exceptions.ConnectionClosedOK:
+                pass
             await asyncio.sleep(0.2)
 
     async def consume(self) -> AsyncGenerator[Tuple[str, RetrosynthesisResult], None]:
@@ -220,9 +218,8 @@ class SpayaClientAsync(SpayaClient):
                     self._update_result(response_json=response_json)
                     while self._smiles_done:
                         yield self._smiles_done.popitem()
-            except websockets.exceptions.ConnectionClosed as cc:
-                if cc.code > 1001:
-                    raise cc
+            except websockets.exceptions.ConnectionClosedOK:
+                pass
             await asyncio.sleep(0.5)
         while self._smiles_done:
             yield self._smiles_done.popitem()

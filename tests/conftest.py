@@ -451,7 +451,12 @@ async def websocket_stop_and_continue(url_websocket_path, port):
                 smiles=smiles_list[0], progression=0, status=StatusCode.SUBMITTED
             ),
         ),
-        (0.3, websockets.ConnectionClosed(code=1001, reason="going away")),
+        (
+            0.3,
+            websockets.ConnectionClosedOK(
+                websockets.frames.Close(code=1001, reason="goinn away"), None
+            ),
+        ),
         (
             0.2,
             create_retro_result(
@@ -608,7 +613,9 @@ async def error_websocket_at_start(url_websocket_path, port):
     smiles_0_received = create_retro_request_str(smiles_list=smiles_list)
     ws.add_to_yield_on_received(
         received=smiles_0_received,
-        elem=websockets.ConnectionClosed(code=1002, reason="protocol error"),
+        elem=websockets.ConnectionClosedError(
+            websockets.frames.Close(code=1002, reason="protocol error"), None
+        ),
         sleep_time=0.1,
     )
 
@@ -635,7 +642,9 @@ async def websocket_error_after_start(url_websocket_path, port):
     )
     ws.add_to_yield_on_received(
         received=smiles_0_received,
-        elem=websockets.ConnectionClosed(code=1002, reason="protocol error"),
+        elem=websockets.ConnectionClosedError(
+            websockets.frames.Close(code=1002, reason="protocol error"), None
+        ),
         sleep_time=3,
     )
     async with WebsocketServerRunner(server=ws):
