@@ -9,7 +9,7 @@ jobs:
     environment: development
     strategy:
       matrix:
-        python_version: ["3.8", "3.9", "3.10"]
+        python_version: ["3.8", "3.9", "3.10", "3.11"]
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
