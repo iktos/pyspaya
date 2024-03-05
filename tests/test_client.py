@@ -46,6 +46,7 @@ def test_create_entry():
         name_reactions_only=["reaction1", "reaction2"],
         name_reactions_exclude=["reaction3", "reaction4"],
         name_reactions_at_least=["reaction5", "reaction6"],
+        filter_regio_issues=False,
     )
 
     client = SpayaClient(
@@ -75,6 +76,7 @@ def test_create_entry():
         "name_reactions_only": ["reaction1", "reaction2"],
         "name_reactions_exclude": ["reaction3", "reaction4"],
         "name_reactions_at_least": ["reaction5", "reaction6"],
+        "filter_regio_issues": False,
     }
 
 

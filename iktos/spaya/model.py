@@ -214,6 +214,7 @@ class RetrosynthesisParameters:
         "intermediate_smiles",
         "imposed_structures",
         "forbidden_structures",
+        "first_disconnections",
         "cc_providers",
         "cc_max_price_per_g",
         "cc_max_delivery_days",
@@ -223,6 +224,7 @@ class RetrosynthesisParameters:
         "name_reactions_only",
         "name_reactions_exclude",
         "name_reactions_at_least",
+        "filter_regio_issues",
     ]
 
     def __init__(
@@ -234,6 +236,7 @@ class RetrosynthesisParameters:
         intermediate_smiles: Optional[List[str]] = None,
         imposed_structures: Optional[List[str]] = None,
         forbidden_structures: Optional[List[str]] = None,
+        first_disconnections: Optional[List[int]] = None,
         cc_providers: Optional[List[str]] = None,
         cc_max_price_per_g: Optional[float] = None,
         cc_max_delivery_days: Optional[int] = None,
@@ -243,6 +246,7 @@ class RetrosynthesisParameters:
         name_reactions_only: Optional[List[str]] = None,
         name_reactions_exclude: Optional[List[str]] = None,
         name_reactions_at_least: Optional[List[str]] = None,
+        filter_regio_issues: Optional[bool] = None,
     ):
         """
         Args:
@@ -256,12 +260,9 @@ class RetrosynthesisParameters:
              these molecules as an intermediate product. This helps guide the process
              through reactions or molecules you already own or have expertise with for
              example.
-            imposed_structures: Desired forbidden substructures (as a list of SMARTS).
-             This will force our models to exclude routes which have at least one of
-             these structures present in one or more of the reactants.
-            forbidden_structures: Desired imposed substructures (as a list of SMARTS).
-             This will force our models to only find routes which have at least one of
-             these structures present in one or more of the reactants.
+            imposed_structures: Desired imposed substructures (as a list of SMARTS).
+            forbidden_structures: Desired forbidden substructures (as a list of SMARTS).
+            first_disconnections: Desired atoms indices to use as 1st disconnections (as a list of integer).
             cc_providers: List of desired commercial compounds providers.
              An empty list select them all
             cc_max_price_per_g: Maximum price per gramme for a commercial compound
@@ -274,14 +275,16 @@ class RetrosynthesisParameters:
             name_reactions_only: List of allowed name reactions
             name_reactions_exclude: List of excluded name reactions
             name_reactions_at_least: List of mandatory name reactions
+            filter_regio_issues: When True, disables the regioselectivity
         """
         self.max_depth = max_depth
         self.max_nb_iterations = max_nb_iterations
         self.early_stopping_score = early_stopping_score
         self.early_stopping_timeout = early_stopping_timeout
         self.intermediate_smiles = intermediate_smiles
-        self.imposed_structures = imposed_structures
         self.forbidden_structures = forbidden_structures
+        self.imposed_structures = imposed_structures
+        self.first_disconnections = first_disconnections
         self.cc_providers = cc_providers
         self.cc_max_price_per_g = cc_max_price_per_g
         self.cc_max_delivery_days = cc_max_delivery_days
@@ -291,13 +294,14 @@ class RetrosynthesisParameters:
         self.name_reactions_only = name_reactions_only
         self.name_reactions_exclude = name_reactions_exclude
         self.name_reactions_at_least = name_reactions_at_least
+        self.filter_regio_issues = filter_regio_issues
 
     def to_dict(self) -> Dict:
         """
         Returns:
             A dictionary for serialization
         """
-        result: Dict[str, Union[int, float, str, List[str]]] = dict()
+        result: Dict[str, Union[int, float, str, List[str], List[int]]] = dict()
         if self.max_depth is not None:
             result["max_depth"] = self.max_depth
         if self.max_nb_iterations is not None:
@@ -312,14 +316,18 @@ class RetrosynthesisParameters:
             result["imposed_structures"] = self.imposed_structures
         if self.forbidden_structures is not None:
             result["forbidden_structures"] = self.forbidden_structures
+        if self.first_disconnections is not None:
+            result["first_disconnections"] = self.first_disconnections
         if self.remove_chirality is not None:
             result["remove_chirality"] = self.remove_chirality
+        if self.filter_regio_issues is not None:
+            result["filter_regio_issues"] = self.filter_regio_issues
         self._to_dict_add_name_reaction(result)
         self._to_dict_add_cc(result)
         return result
 
     def _to_dict_add_name_reaction(
-        self, data: Dict[str, Union[int, float, str, List[str]]]
+        self, data: Dict[str, Union[int, float, str, List[str], List[int]]]
     ):
         if self.name_reactions_only is not None:
             data["name_reactions_only"] = self.name_reactions_only
@@ -328,7 +336,9 @@ class RetrosynthesisParameters:
         if self.name_reactions_at_least is not None:
             data["name_reactions_at_least"] = self.name_reactions_at_least
 
-    def _to_dict_add_cc(self, data: Dict[str, Union[int, float, str, List[str]]]):
+    def _to_dict_add_cc(
+        self, data: Dict[str, Union[int, float, str, List[str], List[int]]]
+    ):
         if self.cc_providers is not None:
             data["cc_providers"] = self.cc_providers
         if self.cc_max_price_per_g is not None:
@@ -354,6 +364,7 @@ class RetrosynthesisParameters:
             and self.intermediate_smiles == other.intermediate_smiles
             and self.imposed_structures == other.imposed_structures
             and self.forbidden_structures == other.forbidden_structures
+            and self.first_disconnections == other.first_disconnections
             and self.cc_providers == other.cc_providers
             and self.cc_max_price_per_g == other.cc_max_price_per_g
             and self.cc_max_delivery_days == other.cc_max_delivery_days
@@ -363,6 +374,7 @@ class RetrosynthesisParameters:
             and self.name_reactions_only == other.name_reactions_only
             and self.name_reactions_exclude == other.name_reactions_exclude
             and self.name_reactions_at_least == other.name_reactions_at_least
+            and self.filter_regio_issues == other.filter_regio_issues
         )
 
 
