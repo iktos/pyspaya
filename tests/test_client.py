@@ -30,6 +30,7 @@ LOGGER = logging.getLogger(__name__)
 def test_create_entry():
     url = "https://localhost:8000"
     parameters = RetrosynthesisParameters(
+        model="v1",
         max_depth=4,
         max_nb_iterations=20,
         early_stopping_score=0.2,
@@ -59,6 +60,7 @@ def test_create_entry():
     smiles_list = ["C", "CC", "CCC", "CCCC", "CCCCC"]
     entry = client._create_entry(smiles=smiles_list)
     assert entry == {
+        "model": "v1",
         "max_depth": 4,
         "max_nb_iterations": 20,
         "early_stopping_score": 0.2,

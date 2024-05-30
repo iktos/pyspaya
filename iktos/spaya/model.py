@@ -207,6 +207,7 @@ class RetrosynthesisParameters:
     """
 
     __slots__: List[str] = [
+        "model",
         "max_depth",
         "max_nb_iterations",
         "early_stopping_score",
@@ -229,6 +230,7 @@ class RetrosynthesisParameters:
 
     def __init__(
         self,
+        model: Optional[str] = None,
         max_depth: Optional[int] = None,
         max_nb_iterations: Optional[int] = None,
         early_stopping_score: Optional[float] = None,
@@ -250,6 +252,7 @@ class RetrosynthesisParameters:
     ):
         """
         Args:
+            model: Spaya's retrosynthesis engine (model) version to use
             max_depth: Maximum route depth
             max_nb_iterations: Maximum number of steps
             early_stopping_score: Score threshold to stop the retrosynthesis of a SMILES
@@ -277,6 +280,7 @@ class RetrosynthesisParameters:
             name_reactions_at_least: List of mandatory name reactions
             filter_regio_issues: When True, disables the regioselectivity
         """
+        self.model = model
         self.max_depth = max_depth
         self.max_nb_iterations = max_nb_iterations
         self.early_stopping_score = early_stopping_score
@@ -302,6 +306,8 @@ class RetrosynthesisParameters:
             A dictionary for serialization
         """
         result: Dict[str, Union[int, float, str, List[str], List[int]]] = dict()
+        if self.model is not None:
+            result["model"] = self.model
         if self.max_depth is not None:
             result["max_depth"] = self.max_depth
         if self.max_nb_iterations is not None:
@@ -359,7 +365,8 @@ class RetrosynthesisParameters:
             True if all parameters others than timing restriction are equal
         """
         return (
-            self.max_depth == other.max_depth
+            self.model == other.model
+            and self.max_depth == other.max_depth
             and self.early_stopping_score == other.early_stopping_score
             and self.intermediate_smiles == other.intermediate_smiles
             and self.imposed_structures == other.imposed_structures
