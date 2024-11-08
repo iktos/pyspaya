@@ -6,6 +6,8 @@
 ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/iktos/pyspaya/release.yml)
 ![GitHub](https://img.shields.io/github/license/iktos/pyspaya)
 
+[Installation](#installation)
+
 [Description](#description)
 - [Spaya API](#spaya-api)
 - [Retrosynthesis parameters](#retrosynthesis-parameters)
@@ -17,6 +19,12 @@
 - [Callback](#callback)
 
 [Url and Authorization](#url-and-authorization)
+
+## Installation
+
+```sh
+pip install pyspaya
+```
 
 ## Description
 
